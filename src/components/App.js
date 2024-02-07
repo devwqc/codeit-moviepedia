@@ -27,6 +27,7 @@ function App() {
       result = await getReviews(options);
     } catch (error) {
       console.error(error);
+      return;
     } finally {
       setIsLoading(false);
     }
