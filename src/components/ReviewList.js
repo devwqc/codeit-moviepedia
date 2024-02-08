@@ -1,3 +1,4 @@
+import Rating from './Rating';
 import './ReviewList.css';
 
 function formatDate(value) {
@@ -12,7 +13,7 @@ function ReviewListItem({ item, onDelete }) {
       <img className="ReviewListItem-img" src={item.imgUrl} alt={item.title} />
       <div>
         <h1>{item.title}</h1>
-        <p>{item.rating}</p>
+        <Rating value={item.rating} />
         <p>{formatDate(item.createdAt)}</p>
         <p>{item.content}</p>
         <button onClick={handdleDeleteClick}>삭제</button>
