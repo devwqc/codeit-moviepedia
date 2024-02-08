@@ -8,13 +8,25 @@ function FileInput({ name, value, onChange }) {
     onChange(name, nextValue);
   };
 
+  const handleClearClick = (e) => {
+    const inputNode = inputRef.current;
+    if (!inputNode) return;
+    inputNode.value = '';
+    onChange(name, null);
+  };
+
   useEffect(() => {
     if (inputRef.current) {
       console.log(inputRef.current);
     }
   }, []);
 
-  return <input type="file" onChange={handleChange} ref={inputRef} />;
+  return (
+    <div>
+      <input type="file" onChange={handleChange} ref={inputRef} />
+      {value && <button onClick={handleClearClick}>X</button>}
+    </div>
+  );
 }
 
 export default FileInput;
