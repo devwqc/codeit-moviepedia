@@ -7,6 +7,7 @@ import {
   updateReviews,
 } from '../api';
 import ReviewForm from './ReviewForm';
+import useAsync from './hooks/useAsync';
 
 const LIMIT = 6;
 
@@ -14,8 +15,7 @@ function App() {
   const [items, setItems] = useState([]);
   const [order, setOrder] = useState('createdAt');
   const [offset, setOffset] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [loadingError, setLoadingError] = useState(null);
+  const [isLoading, loadingError, getReviesAsync] = useAsync(getReviews);
   const sortedItems = items.sort((a, b) => b[order] - a[order]);
 
   const handleNewestClick = () => setOrder('createdAt');
@@ -28,17 +28,8 @@ function App() {
   };
 
   const handleLoad = async (options) => {
-    let result;
-    try {
-      setIsLoading(true);
-      setLoadingError(null);
-      result = await getReviews(options);
-    } catch (error) {
-      setLoadingError(error);
-      return;
-    } finally {
-      setIsLoading(false);
-    }
+    const result = await getReviesAsync(options);
+    if (!result) return;
     const { reviews } = result;
     if (options.offset === 0) {
       setItems(reviews);
@@ -90,7 +81,7 @@ function App() {
       <button disabled={isLoading} onClick={handleLoadMore}>
         더보기
       </button>
-      {loadingError?.message && <span>{loadingError.message}</span>}
+      {loadingError?.message && <div>{loadingError.message}</div>}
     </div>
   );
 }
