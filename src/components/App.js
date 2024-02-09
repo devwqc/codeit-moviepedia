@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import ReviewList from './ReviewList';
-import { createReviews, getReviews, updateReviews } from '../api';
+import {
+  createReviews,
+  deleteReviews,
+  getReviews,
+  updateReviews,
+} from '../api';
 import ReviewForm from './ReviewForm';
 
 const LIMIT = 6;
@@ -16,9 +21,10 @@ function App() {
   const handleNewestClick = () => setOrder('createdAt');
   const handleBestClick = () => setOrder('rating');
 
-  const handleDelete = (id) => {
-    const nextItems = items.filter((item) => item.id !== id);
-    setItems(nextItems);
+  const handleDelete = async (id) => {
+    const result = await deleteReviews(id);
+    if (!result) return;
+    setItems((preItems) => preItems.filter((item) => item.id !== id));
   };
 
   const handleLoad = async (options) => {
